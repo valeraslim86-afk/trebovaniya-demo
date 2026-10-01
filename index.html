@@ -115,6 +115,21 @@ tbody tr:hover td,tr:hover>td{background:color-mix(in srgb,var(--soft) 55%,trans
 .slide .grid .card h3{display:flex;align-items:center;gap:8px}
 @media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}.hero-cover{padding:28px 20px}h2{font-size:24px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.offer{position:relative;overflow:hidden;border-radius:26px;padding:34px 34px 30px;color:#fff;margin:8px 0 6px;background:radial-gradient(800px 260px at 8% -30%,rgba(255,255,255,.3),transparent),radial-gradient(480px 300px at 105% 120%,rgba(16,185,129,.55),transparent),linear-gradient(135deg,#4338ca,#4f46e5 50%,#0ea5e9);box-shadow:0 24px 60px color-mix(in srgb,#4f46e5 38%,transparent)}
+.offer .eyebrow{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;opacity:.88;font-weight:700}
+.offer .price{font-size:clamp(46px,9vw,84px);line-height:1;font-weight:800;letter-spacing:-.03em;margin:8px 0 6px}.offer .price span{font-size:.5em;opacity:.85}
+.offer p{font-size:17px;opacity:.94;max-width:700px;margin:0}
+.sec{font-size:20px;margin:20px 0 8px}
+.cmp{padding:18px 20px}.crow{display:grid;grid-template-columns:minmax(180px,260px) 1fr;gap:14px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}.crow:last-of-type{border-bottom:0}
+.cl small{display:block;color:var(--mute);font-size:12.5px}
+.ctrack{position:relative;height:34px;border-radius:999px;background:color-mix(in srgb,var(--soft) 70%,var(--bg))}
+.seg{position:absolute;top:0;bottom:0;border-radius:999px;background:linear-gradient(90deg,#94a3b8,#64748b);opacity:.55}.usseg{background:linear-gradient(90deg,#10b981,#059669);opacity:1}
+.cv{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-weight:800;font-size:15px;color:var(--ink);text-shadow:0 0 6px var(--card)}
+.crow.us .cl b{color:var(--ok)}
+.nextc{padding:16px 20px;font-size:16px}
+details.why{margin-top:16px;border:1px dashed var(--line);border-radius:16px;padding:6px 14px 14px}details.why>summary{cursor:pointer;font-weight:700;padding:10px 0;color:var(--acc)}
+@media(max-width:760px){.crow{grid-template-columns:1fr}.offer{padding:24px 20px}}
 </style>
 </head>
 <body>
@@ -404,6 +419,15 @@ tbody tr:hover td,tr:hover>td{background:color-mix(in srgb,var(--soft) 55%,trans
   <h2>Вопросы вам: поправьте нас</h2>
   <p class="lead">Отвечайте как удобно, можно голосом на созвоне. От ответов зависит, как мы перестроим схему.</p>
   <div class="grid g2" id="qs"></div>
+  <div class="card" style="margin-top:12px" id="sendBox">
+    <h3>Ответы нам</h3>
+    <p class="hint" style="margin:0 0 8px">Ответы сохраняются в вашем браузере. По кнопке они копируются одним текстом: вставьте их в наш чат. Паролей, ключей и личных данных в ответах не пишите.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+      <label>Как к вам обращаться (необязательно) <input id="aName" type="text" maxlength="80" style="width:240px"></label>
+      <button class="btn" id="aSend">Отправить ответы</button>
+      <span id="aStat" class="hint"></span>
+    </div>
+  </div>
 </section>
 
 <section class="slide" data-title="Дальше" data-aud="r">
@@ -603,6 +627,35 @@ tbody tr:hover td,tr:hover>td{background:color-mix(in srgb,var(--soft) 55%,trans
   document.getElementById('tab1').onclick=function(){cur=0;step=0;draw()};
   document.getElementById('tab2').onclick=function(){cur=1;step=0;draw()};
   draw();
+})();
+</script>
+
+<script>
+(function(){
+  var URL_='';
+  var btn=document.getElementById('aSend');if(!btn)return;
+  var stat=document.getElementById('aStat');if(!URL_){btn.textContent='Скопировать ответы'}
+  var nm=document.getElementById('aName');
+  try{nm.value=localStorage.getItem('trebovaniya_name')||''}catch(e){}
+  nm.oninput=function(){try{localStorage.setItem('trebovaniya_name',nm.value)}catch(e){}};
+  btn.onclick=function(){
+    var tas=document.querySelectorAll('#qs textarea'),ans=[];
+    [].forEach.call(tas,function(t,i){var v=(t.value||'').trim();if(v)ans.push({q:i+1,t:v})});
+    if(!ans.length){stat.textContent='Сначала напишите хотя бы один ответ.';return}
+    if(!URL_){
+      var txt='Ответы на вопросы'+(nm.value?' ('+nm.value+')':'')+':\n\n'+ans.map(function(a){return a.q+'. '+a.t}).join('\n\n');
+      var done=function(){stat.textContent='Скопировано. Вставьте в наш чат и отправьте.'};
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,function(){window.prompt('Скопируйте ответы (Ctrl+C):',txt)})}
+      else{window.prompt('Скопируйте ответы (Ctrl+C):',txt)}
+      return}
+    btn.disabled=true;stat.textContent='Отправляем...';
+    fetch(URL_,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({v:1,name:nm.value||'',answers:ans})})
+     .then(function(r){if(r.status===204||r.ok){stat.textContent='Отправлено, спасибо. Можно дописать и отправить ещё раз.'}
+       else if(r.status===429){stat.textContent='Слишком много отправок за сутки: перешлите ответы в чат.'}
+       else{stat.textContent='Не удалось отправить (код '+r.status+'): перешлите ответы в чат.'}})
+     .catch(function(){stat.textContent='Нет связи: перешлите ответы в чат.'})
+     .then(function(){btn.disabled=false});
+  };
 })();
 </script>
 </body>
