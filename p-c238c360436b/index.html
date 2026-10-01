@@ -130,6 +130,8 @@ tbody tr:hover td,tr:hover>td{background:color-mix(in srgb,var(--soft) 55%,trans
 .nextc{padding:16px 20px;font-size:16px}
 details.why{margin-top:16px;border:1px dashed var(--line);border-radius:16px;padding:6px 14px 14px}details.why>summary{cursor:pointer;font-weight:700;padding:10px 0;color:var(--acc)}
 @media(max-width:760px){.crow{grid-template-columns:1fr}.offer{padding:24px 20px}}
+.offer .price small{font-size:.34em;font-weight:600;opacity:.8;margin:0 .12em;letter-spacing:0}.crow.us .cv{left:19%}
+.fish{border-color:color-mix(in srgb,var(--acc) 45%,var(--line));background:linear-gradient(135deg,color-mix(in srgb,var(--soft) 70%,var(--card)),var(--card))}
 </style>
 </head>
 <body>
@@ -181,6 +183,7 @@ details.why{margin-top:16px;border:1px dashed var(--line);border-radius:16px;pad
       <div class="pi">Классификация: вид, налог, срочность</div>
       <div class="pi">Сроки: квитанция 6 рабочих дней, срок ответа из документа</div>
       <div class="pi">Паттерны: общие контрагенты, повторы, нарастающая проверка</div>
+      <div class="pi">Знания: нормы, письма ФНС, журналы, практика и тренды (база обновляется)</div>
       <div class="pi">Контроль: статус отправленного, срок подписи, подписки, тишина ВМ</div>
       <div class="pi">Черновик: метки вместо имён, затем модель, затем подстановка обратно</div></div>
     <div class="pa"><span>&rarr;</span><small>дашборд, кнопки</small></div>
@@ -306,6 +309,12 @@ details.why{margin-top:16px;border:1px dashed var(--line);border-radius:16px;pad
       <li>Формальная часть ответа идёт по шаблонам, модель пишет только суть.</li>
       <li>Человек проверяет черновик перед отправкой.</li></ul></div>
   </div>
+  
+  <div class="card" style="margin-top:12px"><h3>База знаний и тренды: чем ответ отличается от шаблона</h3>
+    <ul style="margin:6px 0 0 18px;padding:0">
+    <li><span class="tag ok">уже есть</span> Архив журналов и периодики по бухучёту и налогам, собранный и проиндексированный для поиска.</li>
+    <li><span class="tag warn">подключаем</span> Нормативные акты и письма ФНС, судебная практика, разборы на профильных сайтах и у налоговых консультантов. Источники и периодичность обновления согласуем с вами.</li>
+    <li><b>Зачем:</b> черновик ссылается на нормы и практику, а блок «Паттерны» подсвечивает признаки риска, на которые реагируют автоматизированные системы отбора налоговой: общие контрагенты, налоговая нагрузка ниже типичной, расхождения по НДС. Так можно подготовиться заранее.</li></ul></div>
   <div class="card" style="margin-top:12px"><h3>Какая модель</h3>
     Выбираем с вами: модель в вашем контуре (локальная) или российский сервис по вашему договору. Решаем после слепой проверки на 10-20 обезличенных реальных требованиях.
     <p class="demo"><span class="tag warn">не проверено</span> Качество любой модели именно на требованиях ФНС мы пока не измеряли. Условия провайдеров (например, один из них не рассчитан на персональные данные третьих лиц, другой по умолчанию хранит запросы, пока не отключено логирование) читаем отдельно: при надёжной подмене на метки это не мешает.</p></div>
@@ -445,12 +454,12 @@ details.why{margin-top:16px;border:1px dashed var(--line);border-radius:16px;pad
 </section>
 
 <section class="slide" data-title="Оплата" data-aud="r">
-  <div class="aud aud-r">Для руководителя. Блок с ценами: эту страницу клиенту не отправлять</div>
+  <div class="aud aud-r">Для руководителя: условия работы по этапам</div>
   <div class="offer">
     <div class="eyebrow">Предложение &middot; этап 1 под ключ</div>
-    <div class="price">190 000 <span>&#8381;</span></div>
-    <p>Фиксированная цена этапа: сбор требований и статусов из кабинетов, свод по всем юрлицам, отбивки ответственным. До трёх юрлиц, несколько рабочих дней, только чтение.</p>
-    <div class="hchips"><span class="hchip">Оплата после приёмки</span><span class="hchip">Абонплата только с запуска: 25 000 &#8381;/мес</span><span class="hchip">Юрлицо сверх третьего: +24 000 &#8381;</span></div>
+    <div class="price"><small>от</small> 150 000 <small>до</small> 190 000 <span>&#8381;</span></div>
+    <p>Фиксированная цена этапа зависит от числа юрлиц: 150 000 за одно, до 190 000 за три. Сбор требований и статусов из кабинетов, свод по всем юрлицам, отбивки ответственным. Несколько рабочих дней, только чтение.</p>
+    <div class="hchips"><span class="hchip">Оплата после приёмки</span><span class="hchip">Абонплата только с запуска: 25 000 &#8381;/мес</span><span class="hchip">Больше трёх юрлиц: считаем отдельно</span></div>
   </div>
 
   <h3 class="sec">Во сколько обошлось бы заказать это у специалистов</h3>
@@ -459,8 +468,8 @@ details.why{margin-top:16px;border:1px dashed var(--line);border-radius:16px;pad
       <div class="ctrack"><i class="seg" style="left:27.3%;width:68.2%"></i><span class="cv">300 000 - 1 050 000 &#8381;</span></div></div>
     <div class="crow"><div class="cl"><b>Разработчик на заказ</b><small>40-150 часов по 3-5 тыс. &#8381;, 1-2 месяца</small></div>
       <div class="ctrack"><i class="seg" style="left:13.6%;width:50%"></i><span class="cv">150 000 - 700 000 &#8381;</span></div></div>
-    <div class="crow us"><div class="cl"><b>Мы, этап 1</b><small>несколько рабочих дней</small></div>
-      <div class="ctrack"><i class="seg usseg" style="left:0;width:17.3%"></i><span class="cv">190 000 &#8381;</span></div></div>
+    <div class="crow us"><div class="cl"><b>Мы, этап 1</b><small>зависит от числа юрлиц, несколько рабочих дней</small></div>
+      <div class="ctrack"><i class="seg usseg" style="left:13.6%;width:3.7%"></i><span class="cv">150 000 - 190 000 &#8381;</span></div></div>
     <p class="hint" style="margin:8px 0 0">Ориентиры по публичным прайсам подрядчиков, ссылки внизу страницы в разделе расчёта.</p>
   </div>
 
@@ -469,6 +478,12 @@ details.why{margin-top:16px;border:1px dashed var(--line);border-radius:16px;pad
     <div class="card"><div class="ico">&#128269;</div><h3>Начинаем с чтения</h3>Этап короткий: без подписи и отправки. Поэтому дни, а не недели.</div>
     <div class="card"><div class="ico">&#129521;</div><h3>Основа уже собрана</h3>Разведка API СБИС, сборщик, сервер, классификатор, дашборд и тесты готовы. Закладываем только подключение под вас.</div>
     <div class="card"><div class="ico">&#127919;</div><h3>Без накладных</h3>Студии закладывают менеджера, аналитика, команду и тестировщика. Мы делаем малым составом и отвечаем за результат этапа.</div>
+  </div>
+
+  <div class="card fish" style="margin-top:14px"><div class="ico">&#128218;</div>
+    <h3>Наша фишка: ответы опираются на живую базу знаний</h3>
+    <p style="margin:6px 0">Черновик строится не только по шаблону. Мы собираем базу: журналы и периодику по учёту и налогам (архив уже собран и проиндексирован), нормативные акты и письма ФНС, судебную практику, разборы на профильных сайтах и у налоговых консультантов. Часть источников подключаем в процессе и обновляем по расписанию.</p>
+    <p style="margin:6px 0"><b>Что это даёт:</b> ответ со ссылками на нормы и практику, и заранее видно, на какие признаки риска реагируют автоматизированные системы отбора налоговой, чтобы не получать лишние вопросы.</p>
   </div>
 
   <h3 class="sec">Дальше вместе</h3>

@@ -130,6 +130,8 @@ tbody tr:hover td,tr:hover>td{background:color-mix(in srgb,var(--soft) 55%,trans
 .nextc{padding:16px 20px;font-size:16px}
 details.why{margin-top:16px;border:1px dashed var(--line);border-radius:16px;padding:6px 14px 14px}details.why>summary{cursor:pointer;font-weight:700;padding:10px 0;color:var(--acc)}
 @media(max-width:760px){.crow{grid-template-columns:1fr}.offer{padding:24px 20px}}
+.offer .price small{font-size:.34em;font-weight:600;opacity:.8;margin:0 .12em;letter-spacing:0}.crow.us .cv{left:19%}
+.fish{border-color:color-mix(in srgb,var(--acc) 45%,var(--line));background:linear-gradient(135deg,color-mix(in srgb,var(--soft) 70%,var(--card)),var(--card))}
 </style>
 </head>
 <body>
@@ -181,6 +183,7 @@ details.why{margin-top:16px;border:1px dashed var(--line);border-radius:16px;pad
       <div class="pi">Классификация: вид, налог, срочность</div>
       <div class="pi">Сроки: квитанция 6 рабочих дней, срок ответа из документа</div>
       <div class="pi">Паттерны: общие контрагенты, повторы, нарастающая проверка</div>
+      <div class="pi">Знания: нормы, письма ФНС, журналы, практика и тренды (база обновляется)</div>
       <div class="pi">Контроль: статус отправленного, срок подписи, подписки, тишина ВМ</div>
       <div class="pi">Черновик: метки вместо имён, затем модель, затем подстановка обратно</div></div>
     <div class="pa"><span>&rarr;</span><small>дашборд, кнопки</small></div>
@@ -306,6 +309,12 @@ details.why{margin-top:16px;border:1px dashed var(--line);border-radius:16px;pad
       <li>Формальная часть ответа идёт по шаблонам, модель пишет только суть.</li>
       <li>Человек проверяет черновик перед отправкой.</li></ul></div>
   </div>
+  
+  <div class="card" style="margin-top:12px"><h3>База знаний и тренды: чем ответ отличается от шаблона</h3>
+    <ul style="margin:6px 0 0 18px;padding:0">
+    <li><span class="tag ok">уже есть</span> Архив журналов и периодики по бухучёту и налогам, собранный и проиндексированный для поиска.</li>
+    <li><span class="tag warn">подключаем</span> Нормативные акты и письма ФНС, судебная практика, разборы на профильных сайтах и у налоговых консультантов. Источники и периодичность обновления согласуем с вами.</li>
+    <li><b>Зачем:</b> черновик ссылается на нормы и практику, а блок «Паттерны» подсвечивает признаки риска, на которые реагируют автоматизированные системы отбора налоговой: общие контрагенты, налоговая нагрузка ниже типичной, расхождения по НДС. Так можно подготовиться заранее.</li></ul></div>
   <div class="card" style="margin-top:12px"><h3>Какая модель</h3>
     Выбираем с вами: модель в вашем контуре (локальная) или российский сервис по вашему договору. Решаем после слепой проверки на 10-20 обезличенных реальных требованиях.
     <p class="demo"><span class="tag warn">не проверено</span> Качество любой модели именно на требованиях ФНС мы пока не измеряли. Условия провайдеров (например, один из них не рассчитан на персональные данные третьих лиц, другой по умолчанию хранит запросы, пока не отключено логирование) читаем отдельно: при надёжной подмене на метки это не мешает.</p></div>
