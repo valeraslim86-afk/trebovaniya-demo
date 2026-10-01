@@ -55,6 +55,12 @@ nav.bot{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top
 .hint{color:var(--mute);font-size:13px}
 .demo{font-size:12px;color:var(--mute);margin-top:14px}
 .risk{border-left:4px solid var(--warn);padding-left:10px}
+.lane{fill:var(--bg);stroke:none}.lane.alt{fill:var(--card)}.lanelbl{fill:var(--mute);font-size:13px;font-weight:600}
+.nd rect{fill:var(--card);stroke:var(--line);stroke-width:1.5}.nd text.t{fill:var(--ink);font-size:14px;font-weight:600}.nd text.s{fill:var(--mute);font-size:12px}
+.nd.f{opacity:.28}.nd.d rect{stroke:var(--acc);}.nd.c rect{stroke:var(--acc);stroke-width:3.5;fill:var(--soft)}
+.ar{stroke:var(--line);stroke-width:2.5;fill:none}.ar.f{opacity:.25}.ar.d{stroke:var(--acc)}.ar.c{stroke:var(--acc);stroke-width:3.5}
+.ar.dash{stroke-dasharray:7 5}.arl{fill:var(--mute);font-size:12px}.arl.f{opacity:.3}
+.chipn{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}.chipn.on{background:var(--acc);color:#fff;border-color:var(--acc)}.chipn.done{border-color:var(--acc);color:var(--acc)}
 select,label{font:inherit;color:var(--ink)}select{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:4px 8px}
 .chip{display:inline-block;white-space:nowrap;font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--line)}.chip.bad{color:var(--bad);border-color:var(--bad)}.chip.warn{color:var(--warn);border-color:var(--warn)}.chip.ok{color:var(--ok);border-color:var(--ok)}.chip.in{color:var(--acc);border-color:var(--acc)}
 .pat{border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:8px}.pat b{display:block}
@@ -91,56 +97,22 @@ select,label{font:inherit;color:var(--ink)}select{background:var(--bg);border:1p
 <section class="slide" data-title="Поток" data-aud="r">
   <div class="aud aud-r">Для руководителя</div>
   <h2>Путь требования туда и ответа обратно</h2>
-  <p class="lead">Сплошные стрелки: сбор (этап 1, только чтение). Пунктир: обратный путь ответа до налоговой (этап 2, включается по вашему согласию). Штриховая рамка слева: то, что не покидает виртуальную машину юрлица.</p>
+  <p class="lead">Нажимайте «Дальше»: показываем по одному шагу. Два сценария: сбор требования (этап 1, только чтение) и ответ налоговой (этап 2, включается по вашему согласию). Ряды слева показывают, где что происходит.</p>
+  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+    <button class="btn" id="tab1">Этап 1: сбор требования</button>
+    <button class="btn ghost" id="tab2">Этап 2: ответ налоговой</button>
+  </div>
   <div class="card">
-  <div style="overflow-x:auto"><svg viewBox="0 0 980 530" width="100%" style="min-width:760px" role="img" aria-label="Схема потока данных">
-    <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="currentColor" style="color:var(--mute)"/></marker></defs>
-    <rect class="box" x="10" y="20" width="300" height="500" rx="14" style="stroke-dasharray:6 5"/>
-    <text class="sub" x="24" y="42">Виртуальная машина (ВМ) юрлица А (то же для Б, В)</text>
-    <rect id="n1" class="box" x="30" y="60" width="260" height="62" rx="10"/><text class="lbl" x="44" y="88">Кабинет СБИС юрлица</text><text class="sub" x="44" y="108">требования, служебные этапы</text>
-    <rect id="n2" class="box" x="30" y="150" width="260" height="62" rx="10"/><text class="lbl" x="44" y="178">Сборщик (без модели)</text><text class="sub" x="44" y="198">читает по API, раз в 15 минут</text>
-    <rect id="n3" class="box" x="30" y="240" width="260" height="62" rx="10"/><text class="lbl" x="44" y="268">Локальная очередь</text><text class="sub" x="44" y="288">копит, если нет связи</text>
-    <path id="a1" class="arrow" d="M160 122 V148"/><path id="a2" class="arrow" d="M160 212 V238"/>
-    <path id="a3" class="arrow" d="M290 271 H430"/>
-    <text class="sub" x="300" y="262">только исходящее</text><text class="sub" x="300" y="296">канал выберем вместе</text>
-    <rect id="n4" class="box" x="430" y="60" width="240" height="400" rx="14"/><text class="sub" x="446" y="82">Сервер (наш)</text>
-    <rect id="n5" class="box" x="450" y="100" width="200" height="56" rx="10"/><text class="lbl" x="462" y="124">Приём карточек</text><text class="sub" x="462" y="142">проверка контура, без дублей</text>
-    <rect id="n6" class="box" x="450" y="180" width="200" height="56" rx="10"/><text class="lbl" x="462" y="204">Хранилище и сроки</text><text class="sub" x="462" y="222">статус только растёт</text>
-    <rect id="n7" class="box" x="450" y="260" width="200" height="56" rx="10"/><text class="lbl" x="462" y="284">Черновики ответов</text><text class="sub" x="462" y="302">модель работает только тут</text>
-    <path id="a4" class="arrow" d="M550 156 V178"/><path id="a5" class="arrow" d="M550 236 V258"/>
-    <path id="a6" class="arrow" d="M670 208 H740"/>
-    <rect id="n8" class="box" x="740" y="60" width="230" height="130" rx="14"/><text class="lbl" x="756" y="90">Дашборд и пульт</text><text class="sub" x="756" y="110">по всем юрлицам в одном экране</text><text class="sub" x="756" y="128">провал до юрлица и требования</text><text class="sub" x="756" y="156" style="fill:var(--acc)">кнопка «Утвердить и отправить»</text>
-    <rect id="n9" class="box" x="740" y="215" width="230" height="110" rx="14"/><text class="lbl" x="756" y="245">Отбивка ответственному</text><text class="sub" x="756" y="265">новое, горит, просрочено,</text><text class="sub" x="756" y="283">готов черновик</text>
-    <path id="a7" class="arrow" d="M670 215 L740 255"/>
-    <!-- ОБРАТНЫЙ ПУТЬ (этап 2) -->
-    <rect id="n10" class="box" x="30" y="350" width="260" height="70" rx="10" style="stroke-dasharray:5 4"/><text class="lbl" x="44" y="378">Исполнитель ответа (этап 2)</text><text class="sub" x="44" y="398">ваша подпись, отправка по API</text>
-    <rect id="n11" class="box" x="450" y="350" width="200" height="70" rx="10" style="stroke-dasharray:5 4"/><text class="lbl" x="462" y="376">Утверждённые ответы</text><text class="sub" x="462" y="396">очередь «исходящие» юрлица</text>
-    <rect id="n12" class="box" x="740" y="350" width="230" height="150" rx="14" style="stroke-dasharray:5 4"/><text class="lbl" x="756" y="380">Кабинет СБИС</text><text class="sub" x="756" y="400">принимает действие и отправляет</text><text class="sub" x="756" y="418">ответ налоговой (ФНС)</text><text class="sub" x="756" y="446">статус читает сборщик и</text><text class="sub" x="756" y="464">возвращает карточкой на сервер</text>
-    <path id="a8" class="arrow" style="stroke-dasharray:6 5" d="M760 190 C 735 280 700 385 652 385"/>
-    
-    <path id="a9" class="arrow" style="stroke-dasharray:6 5" d="M450 385 H292"/>
-    <text class="sub" x="302" y="372">ВМ забирает</text><text class="sub" x="302" y="414">запрос исходящий</text>
-    <path id="a10" class="arrow" style="stroke-dasharray:6 5" d="M160 420 V485 H700 V430 H738"/>
-    <text class="sub" x="330" y="480">вызовы API СБИС: подготовить, подписать, выполнить</text>
-  </svg></div>
-  <div class="steps" id="flowSteps">
-    <div class="step"><span class="who s">Кабинет</span><br>Пришло требование или служебный этап.</div>
-    <div class="step"><span class="who s">Сборщик</span><br>Читает по API, считает срок квитанции. Запрашиваем без блокировки событий: у ваших сотрудников они не пропадают.</div>
-    <div class="step"><span class="who s">Очередь</span><br>Складывает карточку, копит при обрыве.</div>
-    <div class="step"><span class="who">Сервер</span><br>Принимает без дублей, хранит, следит за сроком.</div>
-    <div class="step"><span class="who v">Люди</span><br>Дашборд и отбивка ответственному.</div>
+    <div style="overflow-x:auto"><svg id="flowSvg" viewBox="0 0 980 470" width="100%" style="min-width:760px" role="img" aria-label="Пошаговая схема потока данных"></svg></div>
+    <div id="flowInfo" class="card" style="margin-top:10px;background:var(--soft)"></div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px">
+      <button class="btn ghost" id="fPrev">Назад</button>
+      <button class="btn" id="fNext">Дальше</button>
+      <button class="btn ghost" id="fReset">С начала</button>
+      <span id="fChips" style="display:flex;gap:6px;flex-wrap:wrap;margin-left:8px"></span>
+    </div>
   </div>
-  <p class="demo">Канал доставки карточек на сервер (HTTPS на наш приёмник, почта или общая папка) выберем с вами; ВМ нужен только исходящий доступ. Выход из сессии проверим при первом живом прогоне.</p><p style="margin-top:12px"><button class="btn" id="play">Показать путь требования</button> <button class="btn ghost" id="reset">Сбросить</button></p>
-  <h3 style="margin-top:14px">Обратный путь ответа (этап 2)</h3>
-  <div class="steps" id="backSteps">
-    <div class="step"><span class="who h">Человек</span><br><b>1.</b> На пульте правит черновик и нажимает «Утвердить и отправить».</div>
-    <div class="step"><span class="who">Сервер</span><br><b>2.</b> Утверждённый пакет ложится в «исходящие» этого юрлица.</div>
-    <div class="step"><span class="who v">ВМ</span><br><b>3.</b> Исполнитель ответа сам забирает пакет: запрос исходящий.</div>
-    <div class="step"><span class="who v">ВМ</span><br><b>4.</b> Подготовка действия, подпись вашим сертификатом, выполнение по API.</div>
-    <div class="step"><span class="who s">СБИС</span><br><b>5.</b> Отправляет ответ налоговой. Статус читает сборщик и возвращает карточкой.</div>
-  </div>
-  <p><button class="btn" id="playBack">Показать обратный путь</button> <button class="btn ghost" id="resetBack">Сбросить</button></p>
-  </div>
+  <p class="demo">Канал доставки карточек на сервер (HTTPS на наш приёмник, почта или общая папка) выберем с вами; ВМ нужен только исходящий доступ. Выход из сессии проверим при первом живом прогоне.</p>
 </section>
 
 <section class="slide" data-title="Инструменты" data-aud="t">
@@ -392,22 +364,6 @@ select,label{font:inherit;color:var(--ink)}select{background:var(--bg);border:1p
   var h=parseInt((location.hash||'').slice(1),10);go(isNaN(h)?0:h-1);
   var th=document.getElementById('theme');th.onclick=function(){var r=document.documentElement,d=r.getAttribute('data-theme');r.setAttribute('data-theme',d==='dark'?'light':'dark')};
 
-  // анимация потока
-  var nodes=[['n1'],['n2','a1'],['n3','a2'],['a3','n5','n4'],['n6','a4','n7','a5','a6','n8','n9','a7']];
-  var flowSteps=[].slice.call(document.querySelectorAll('#flowSteps .step'));
-  function lit(el,on){var e=document.getElementById(el);if(!e)return;e.classList.toggle('hot',on)}
-  function flowShow(k){nodes.forEach(function(g,j){g.forEach(function(id){lit(id,j<=k&&k>=0)})});flowSteps.forEach(function(s,j){s.classList.toggle('on',j===k)})}
-  var backNodes=[['n8','n9'],['a8','n11'],['a9','n10'],['a10','n12'],['n12']];
-  var backSteps=[].slice.call(document.querySelectorAll('#backSteps .step'));
-  function backShow(k){var ids=['n8','n9','a8','n11','a9','n10','a10','n12'];ids.forEach(function(id){lit(id,false)});
-    backNodes.forEach(function(g,j){g.forEach(function(id){if(j<=k&&k>=0)lit(id,true)})});backSteps.forEach(function(s,j){s.classList.toggle('on',j===k)})}
-  var tb=null;
-  document.getElementById('playBack').onclick=function(){clearInterval(tb);var k=-1;tb=setInterval(function(){k++;if(k>=backNodes.length){clearInterval(tb);return}backShow(k)},1200)};
-  document.getElementById('resetBack').onclick=function(){clearInterval(tb);backShow(-1)};
-  var timer=null;
-  document.getElementById('play').onclick=function(){clearInterval(timer);var k=-1;timer=setInterval(function(){k++;if(k>=nodes.length){clearInterval(timer);return}flowShow(k)},1100)};
-  document.getElementById('reset').onclick=function(){clearInterval(timer);flowShow(-1)};
-
   // анимация цикла ответа
   var rs=[].slice.call(document.querySelectorAll('#replySteps .step')),t2=null;
   document.getElementById('playReply').onclick=function(){clearInterval(t2);var k=-1;t2=setInterval(function(){k++;if(k>=rs.length){clearInterval(t2);return}rs.forEach(function(s,j){s.classList.toggle('on',j===k)})},1200)};
@@ -498,5 +454,76 @@ select,label{font:inherit;color:var(--ink)}select{background:var(--bg);border:1p
 </script>
 
 
+
+<script>
+(function(){
+  var svg=document.getElementById('flowSvg');if(!svg)return;
+  var NS='http://www.w3.org/2000/svg';
+  var LANES=['Налоговая и кабинет СБИС','Виртуальная машина (ВМ) юрлица','Наш сервер','Люди'];
+  var LY=[8,121,234,347],LH=108,NW=170,NH=62,CX=[180,380,580,780];
+  function nodeBox(l,c){return {x:CX[c],y:LY[l]+23,w:NW,h:NH}}
+  var STAGES=[
+   {name:'Этап 1: сбор требования',dash:false,steps:[
+    {n:[0,0,'Кабинет СБИС','пришло требование'],title:'Пришло требование',who:'Налоговая, кабинет СБИС',text:'Налоговая отправила требование или служебный документ. Он лежит в онлайн-кабинете юрлица у оператора ЭДО.',data:'Сами файлы остаются в кабинете.'},
+    {n:[1,0,'Сборщик на ВМ','читает по API'],from:0,label:'читает',title:'Сборщик читает кабинет',who:'ВМ юрлица',text:'Маленькая программа на виртуальной машине каждые 15 минут заходит в СБИС по API (один вход, только чтение), выходит сразу. Запрос без блокировки событий: у ваших сотрудников они не пропадают.',data:'Берутся номер, даты, вид, состояние, срок. Паролей и файлов в выгрузке нет.'},
+    {n:[1,1,'Очередь на ВМ','копит при обрыве'],from:1,title:'Карточка ложится в очередь',who:'ВМ юрлица',text:'Из ответа СБИС собирается карточка требования и кладётся в локальную очередь. Нет связи с сервером: карточки копятся и уйдут позже, без дублей.',data:'Карточка: номер, дата, срок, статус, суть.'},
+    {n:[2,1,'Приём на сервере','проверка, без дублей'],from:2,label:'только исходящее, HTTPS',title:'Карточка уходит на сервер',who:'ВМ → наш сервер',text:'ВМ сама отправляет подписанную пачку на наш сервер по HTTPS. Сервер сверяет подпись и юрлицо, повтор старой пачки отбрасывает. Входящих соединений на ВМ нет.',data:'Только зашифрованный пакет с карточками.'},
+    {n:[2,2,'Хранение и сроки','статус только растёт'],from:3,title:'Сервер хранит и считает сроки',who:'Наш сервер',text:'Карточка сохраняется. Считается срок квитанции (6 рабочих дней), следим за ним и за сроком ответа, если его дал документ. Статус только растёт: старый ответ не откатывает новый.',data:'Срок ответа берём из документа, иначе пишем «нет данных».'},
+    {n:[3,2,'Дашборд и отбивка','ответственному'],from:4,title:'Человек видит и получает отбивку',who:'Ответственный',text:'Требование появляется в дашборде по всем юрлицам, ответственный получает отбивку: новое, горит, просрочено, готов черновик.',data:'Классификация: вид, налог, срочность, паттерны.'},
+    {n:[2,3,'Черновик ответа','модель только тут'],from:4,title:'Готовится черновик ответа',who:'Наш сервер',text:'Когда требование расшифровано держателем подписи, сервер готовит черновик ответа. Перед моделью имена и номера подменяются метками, настоящие значения возвращаются после.',data:'Модель настоящих имён и ИНН не видит.'}
+   ]},
+   {name:'Этап 2: ответ налоговой',dash:true,steps:[
+    {n:[3,0,'Пульт','правит черновик'],title:'Человек утверждает ответ',who:'Ответственный',text:'На пульте (дашборд с кнопками) ответственный читает черновик, правит и нажимает «Утвердить и отправить».',data:'Это решение человека; без него ничего не отправляется.'},
+    {n:[2,0,'Исходящие юрлица','утверждённый пакет'],from:0,title:'Пакет ложится в «исходящие»',who:'Наш сервер',text:'Утверждённый пакет ложится в очередь «исходящие» именно этого юрлица. Он подписывается, чтобы подмена по пути была заметна.',data:'Пакет: текст ответа и перечень вложений.'},
+    {n:[1,0,'Исполнитель','ответа на ВМ'],from:1,label:'ВМ забирает',label2:'(запрос исходящий)',title:'ВМ сама забирает пакет',who:'ВМ юрлица',text:'Исполнитель ответа на ВМ сам обращается к серверу и забирает утверждённое: входящих подключений на ВМ нет. Готовит действие и подписывает вашим сертификатом, который уже стоит на этой ВМ.',data:'Ключ подписи с ВМ не уходит.'},
+    {n:[0,0,'Кабинет СБИС','отправляет ответ'],from:2,label:'по API',title:'Выгрузка в кабинет',who:'ВМ → кабинет СБИС',text:'Исполнитель вызывает методы СБИС (подготовить действие, выполнить действие с подписью) и ответ уходит из кабинета юрлица его же подписью.',data:'Подтверждено документацией, на боевых данных не проверялось.'},
+    {n:[0,1,'Налоговая','получает ответ'],from:3,title:'Налоговая получает ответ',who:'Налоговая',text:'Оператор передаёт ответ налоговой, в кабинет приходит квитанция и меняется статус документа.',data:'Квитанция и статус появляются в кабинете.'},
+    {n:[1,1,'Сборщик на ВМ','читает статус'],from:4,title:'Сборщик видит новый статус',who:'ВМ юрлица',text:'При следующем чтении (через 15 минут или раньше) сборщик видит статус «принято» или ошибку, в том числе проблемы с подписью.',data:'То же чтение, что в этапе 1.'},
+    {n:[2,1,'Статус на сервере','карточка закрыта'],from:5,title:'Карточка обновляется',who:'Наш сервер',text:'Статус возвращается карточкой на сервер. Принято: карточка закрыта. Ошибка или тишина дольше нормы: срочная отбивка.',data:'Статус только растёт, дублей нет.'},
+    {n:[3,1,'Отбивка','«ответ дошёл»'],from:6,title:'Человек знает результат',who:'Ответственный',text:'Ответственный получает отбивку «ответ принят» или «проблема с подписью, нужна ваша помощь».',data:'Цикл замкнут.'}
+   ]}
+  ];
+  var cur=0,step=0;
+  function el(t,attrs,parent){var e=document.createElementNS(NS,t);for(var k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
+  function draw(){
+    while(svg.firstChild)svg.removeChild(svg.firstChild);
+    var defs=el('defs',{},svg),m=el('marker',{id:'ahx',viewBox:'0 0 10 10',refX:'9',refY:'5',markerWidth:'7',markerHeight:'7',orient:'auto'},defs);
+    el('path',{d:'M0 0L10 5L0 10z',fill:'currentColor',style:'color:var(--mute)'},m);
+    LANES.forEach(function(nm,i){el('rect',{x:0,y:LY[i],width:980,height:LH,class:'lane'+(i%2?' alt':''),rx:8},svg);
+      var t=el('text',{x:10,y:LY[i]+36,class:'lanelbl'},svg);
+      nm.split(' ').reduce(function(lines,w){var l=lines[lines.length-1];if((l+' '+w).length>16&&l){lines.push(w)}else lines[lines.length-1]=(l?l+' ':'')+w;return lines},['']).forEach(function(ln,k){var ts=el('tspan',{x:10,dy:k?15:0},t);ts.textContent=ln})});
+    var S=STAGES[cur];
+    S.steps.forEach(function(st,i){
+      var cls=i<step?'d':i===step?'c':'f';
+      if(st.from!==undefined){
+        var A=S.steps[st.from].n,B=st.n,a=nodeBox(A[0],A[1]),b=nodeBox(B[0],B[1]),d;
+        if(A[0]===B[0]){var right=B[1]>A[1];d=right?'M'+(a.x+a.w)+' '+(a.y+a.h/2)+' H'+(b.x-3):'M'+a.x+' '+(a.y+a.h/2)+' H'+(b.x+b.w+3)}
+        else{var down=B[0]>A[0],x=a.x+a.w/2;d=down?'M'+x+' '+(a.y+a.h)+' V'+(b.y-3):'M'+x+' '+a.y+' V'+(b.y+b.h+3)}
+        el('path',{d:d,class:'ar '+cls+(S.dash?' dash':''),'marker-end':'url(#ahx)'},svg);
+        if(st.label){var lx=A[0]===B[0]?(a.x+a.w+(b.x-a.x-a.w)/2-30):(a.x+a.w/2+8),ly=A[0]===B[0]?(a.y+a.h/2-8):((a.y+a.h+b.y)/2+(B[0]>A[0]?4:0));
+          var t=el('text',{x:lx,y:ly,class:'arl '+cls},svg);t.textContent=st.label;
+          if(st.label2){var t2=el('text',{x:lx,y:ly+14,class:'arl '+cls},svg);t2.textContent=st.label2}}
+      }
+      var b0=nodeBox(st.n[0],st.n[1]),g=el('g',{class:'nd '+cls},svg);
+      el('rect',{x:b0.x,y:b0.y,width:b0.w,height:b0.h,rx:10},g);
+      var t1=el('text',{x:b0.x+10,y:b0.y+26,class:'t'},g);t1.textContent=st.n[2];
+      var t2=el('text',{x:b0.x+10,y:b0.y+46,class:'s'},g);t2.textContent=st.n[3];
+      var num=el('circle',{cx:b0.x+b0.w-14,cy:b0.y+14,r:11,fill:i<=step?'var(--acc)':'var(--line)'},g),nt=el('text',{x:b0.x+b0.w-14,y:b0.y+18,'text-anchor':'middle',style:'fill:#fff;font-size:12px;font-weight:700'},g);nt.textContent=i+1;
+    });
+    var st=S.steps[step];
+    document.getElementById('flowInfo').innerHTML='<div class="hint">Шаг '+(step+1)+' из '+S.steps.length+' &middot; '+st.who+'</div><b style="font-size:18px">'+st.title+'</b><p style="margin:6px 0">'+st.text+'</p><p class="hint" style="margin:0"><b>Данные:</b> '+st.data+'</p>';
+    var chips=document.getElementById('fChips');chips.innerHTML='';
+    S.steps.forEach(function(x,i){var c=document.createElement('button');c.className='chipn'+(i===step?' on':i<step?' done':'');c.textContent=i+1;c.onclick=function(){step=i;draw()};chips.appendChild(c)});
+    document.getElementById('tab1').className='btn'+(cur===0?'':' ghost');document.getElementById('tab2').className='btn'+(cur===1?'':' ghost');
+    document.getElementById('fPrev').disabled=step===0;document.getElementById('fNext').disabled=step===S.steps.length-1;
+  }
+  document.getElementById('fNext').onclick=function(){if(step<STAGES[cur].steps.length-1){step++;draw()}};
+  document.getElementById('fPrev').onclick=function(){if(step>0){step--;draw()}};
+  document.getElementById('fReset').onclick=function(){step=0;draw()};
+  document.getElementById('tab1').onclick=function(){cur=0;step=0;draw()};
+  document.getElementById('tab2').onclick=function(){cur=1;step=0;draw()};
+  draw();
+})();
+</script>
 </body>
 </html>
