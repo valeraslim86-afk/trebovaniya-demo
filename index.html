@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<meta name="description" content="Как работает сбор требований ФНС по юрлицам: схема, инструменты, границы, отправка ответа, контроль статусов. Демонстрация на условных данных.">
+<meta name="description" content="Как работает сбор требований ФНС по юрлицам: схема, классификация, дашборд с паттернами, инструменты, отправка ответа. Демонстрация на условных данных.">
 <title>Система по требованиям ФНС: как это работает</title>
 <style>
 :root{--bg:#f4f6fb;--card:#fff;--ink:#1c2433;--mute:#5d6a82;--line:#d9e0ee;--acc:#2563eb;--acc2:#0ea5a4;--warn:#d97706;--bad:#dc2626;--ok:#16a34a;--soft:#eaf0fe}
@@ -55,6 +55,9 @@ nav.bot{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top
 .hint{color:var(--mute);font-size:13px}
 .demo{font-size:12px;color:var(--mute);margin-top:14px}
 .risk{border-left:4px solid var(--warn);padding-left:10px}
+select,label{font:inherit;color:var(--ink)}select{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:4px 8px}
+.chip{display:inline-block;white-space:nowrap;font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--line)}.chip.bad{color:var(--bad);border-color:var(--bad)}.chip.warn{color:var(--warn);border-color:var(--warn)}.chip.ok{color:var(--ok);border-color:var(--ok)}.chip.in{color:var(--acc);border-color:var(--acc)}
+.pat{border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:8px}.pat b{display:block}
 .aud{display:inline-block;font-size:13px;font-weight:600;padding:4px 12px;border-radius:999px;margin:2px 0 6px}
 .aud-r{background:var(--soft);color:var(--acc)}.aud-t{background:transparent;border:1px dashed var(--warn);color:var(--warn)}.aud-b{background:var(--soft);color:var(--acc2)}
 #dots button.d-t{background:transparent;border:2px solid var(--warn)}#dots button.d-b{background:var(--acc2)}
@@ -302,30 +305,47 @@ nav.bot{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top
   <p class="demo">Цифры и примеры выдуманы для макета. Эти проверки входят в этап 1 (чтение); отправку они не включают.</p>
 </section>
 
+<section class="slide" data-title="Классификация" data-aud="b">
+  <div class="aud aud-b">Для руководителя (идея) и специалиста (детали)</div>
+  <h2>Как система разбирает каждое требование</h2>
+  <p class="lead">Каждый документ получает три метки: <b>вид</b> (что от нас хотят), <b>тема налога</b> и <b>срочность</b>. Метки ставит код по типу документа, тексту и срокам, а не модель, поэтому результат проверяем.</p>
+  <div class="card"><table>
+    <tr><th>Вид</th><th>Что это значит</th><th>Срок и действие</th></tr>
+    <tr><td><b>Запрос документов</b> (ст. 93, 93.1; КНД 1165013 подтверждён в документации СБИС)</td><td>Налоговая просит документы или информацию, в т.ч. по конкретному контрагенту</td><td>Квитанция 6 рабочих дней; на ответ по НК обычно 10 дней (5 по запросу о контрагенте). Срок берём из документа</td></tr>
+    <tr><td><b>Пояснения</b> (ст. 88)</td><td>Расхождения в декларации, нужны письменные пояснения</td><td>Квитанция 6 рабочих дней; на пояснения по НК обычно 5. Срок берём из документа</td></tr>
+    <tr><td><b>Вызов в инспекцию</b></td><td>Приглашение на конкретную дату</td><td>Срок: дата вызова из документа. Нужен человек</td></tr>
+    <tr><td><b>Блокировка счёта</b> (приостановление операций)</td><td>Налоговая приостановила операции по счетам</td><td><b>Срочно.</b> Сначала причина: не отправлена квитанция, долг, не сдана декларация</td></tr>
+    <tr><td><b>Требование об уплате</b></td><td>Налог, пени или недоимка</td><td>Срок в самом требовании; проверить сверку в ЕНС</td></tr>
+    <tr><td><b>Акт или решение по проверке</b></td><td>Итог камеральной или выездной проверки</td><td>Срок на возражения в документе; нужен бухгалтер и юрист</td></tr>
+    <tr><td><b>Уведомление, письмо</b></td><td>Информация без обязательного ответа</td><td>К сведению, закрывается после прочтения</td></tr>
+  </table></div>
+  <div class="grid g3" style="margin-top:12px">
+    <div class="card"><h3>Тема налога</h3>НДС, прибыль или УСН, НДФЛ и взносы, ЕНС и пени, имущество и транспорт, прочее. Определяется по типу, ключевым словам и налоговому периоду.</div>
+    <div class="card"><h3>Срочность</h3>Блокировка: сразу. Квитанция или ответ осталось 2 дня и меньше: горит. Прошёл срок: просрочено. Остальное: в работе.</div>
+    <div class="card risk"><h3>Оговорка</h3>Сроки по НК здесь подсказка. Всегда берём срок из самого документа, юридически его проверяет ваш бухгалтер. Коды форм КНД кроме подтверждённого уточним на первых реальных документах.</div>
+  </div>
+</section>
+
 <section class="slide" data-title="Дашборд" data-aud="r">
-  <div class="aud aud-r">Для руководителя</div>
-  <h2>Что увидит ответственный</h2>
-  <p class="lead">Макет, цифры выдуманы. Сверху то, что требует действия сейчас, ниже счётчики и разбивка по юрлицам. Живого дашборда у вас пока нет: он будет на нашей стороне, доступ вы определяете.</p>
-  <div class="grid g3">
-    <div class="tile"><div class="n" style="color:var(--bad)">2</div>Требует действия сейчас</div>
-    <div class="tile"><div class="n" style="color:var(--warn)">1</div>Квитанция: срок близко</div>
-    <div class="tile"><div class="n">3</div>Открытые требования</div>
-    <div class="tile"><div class="n" style="color:var(--acc2)">1</div>Черновик ждёт проверки</div>
-    <div class="tile"><div class="n">0</div>Контуров без свежих данных</div>
-    <div class="tile"><div class="n">3</div>Юрлица в системе</div>
+  <div class="aud aud-r">Для руководителя: можно поиграть с фильтрами</div>
+  <h2>Дашборд: что пришло, что горит и что за этим видно</h2>
+  <p class="lead">Макет, все цифры выдуманы. Нажимайте фильтры: плитки, таблица и блок «Паттерны» пересчитываются. Паттерны считает код по карточкам; модель потом объясняет их простыми словами.</p>
+  <div class="card" style="margin-bottom:12px">
+    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+      <label>Юрлицо <select id="fE"><option value="">все</option><option>А</option><option>Б</option><option>В</option></select></label>
+      <label>Вид <select id="fK"><option value="">все</option></select></label>
+      <label>Налог <select id="fT"><option value="">все</option></select></label>
+      <label>Статус <select id="fS"><option value="">все</option><option value="new">Новое</option><option value="draft">Черновик готов</option><option value="receipt">Квитанция отправлена</option><option value="answered">Закрыто</option></select></label>
+      <label><input type="checkbox" id="fU"> только срочные</label>
+      <button class="btn ghost" id="fR">Сбросить</button>
+    </div>
   </div>
+  <div class="grid g3" id="tiles"></div>
   <div class="grid g2" style="margin-top:12px">
-    <div class="card"><h3>По юрлицам</h3><table>
-      <tr><th>Юрлицо</th><th>Открыто</th><th>Ближайший срок</th><th>Связь</th></tr>
-      <tr><td>Юрлицо А</td><td>1</td><td><span class="tag bad">квитанция 02.10</span></td><td><span class="tag ok">ок, 15 мин назад</span></td></tr>
-      <tr><td>Юрлицо Б</td><td>1</td><td><span class="tag ok">черновик готов</span></td><td><span class="tag ok">ок, 12 мин назад</span></td></tr>
-      <tr><td>Юрлицо В</td><td>1</td><td><span class="tag warn">ответ до 08.10</span></td><td><span class="tag ok">ок, 14 мин назад</span></td></tr></table></div>
-    <div class="card"><h3>Отбивка ответственному</h3>
-      <div class="bubble">Квитанция по Юрлицу А №18842 горит: срок 02.10.2026, осталось рабочих дней: 1.</div>
-      <p style="margin:10px 0 6px">Кнопки в карточке:</p>
-      <button class="btn ghost">Квитанция отправлена</button> <button class="btn ghost">Ответ отправлен</button> <button class="btn ghost">Позже</button></div>
+    <div class="card"><h3>Требования</h3><div style="overflow-x:auto"><table id="tbl"></table></div></div>
+    <div class="card"><h3>Паттерны <span class="tag">считает код</span></h3><div id="pat"></div></div>
   </div>
-  <p class="demo">Срок ответа показываем только если его дал источник. Если даты нет, система пишет «нет данных» и просит проверить вручную.</p>
+  <p class="demo">Блок «Паттерны» это оценка риска: где налоговая может видеть связь или нарастающую проверку. Он помогает вовремя подготовиться, а не скрыть что-либо. Срок ответа показываем, только если его дал документ.</p>
 </section>
 
 <section class="slide" data-title="Вопросы" data-aud="t">
@@ -407,6 +427,71 @@ nav.bot{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top
     d.innerHTML='<b>'+(k+1)+'.</b> '+t+'<textarea placeholder="Ответ"></textarea>';
     var ta=d.querySelector('textarea');ta.value=saved;ta.oninput=function(){try{localStorage.setItem('trebovaniya_'+id,ta.value)}catch(e){}};
     box.appendChild(d)});
+})();
+</script>
+
+<script>
+(function(){
+  var K={doc93:'Запрос документов',expl88:'Пояснения',call:'Вызов в инспекцию',block:'Блокировка счёта',pay69:'Требование об уплате',act:'Акт проверки',info:'Уведомление'};
+  var ST={'new':'Новое',draft:'Черновик готов',receipt:'Квитанция отправлена',answered:'Закрыто'};
+  var D=[
+   {e:'А',k:'doc93',t:'НДС',s:'new',due:'02.10',l:1,c:'К-7',p:'2 кв. 2026'},
+   {e:'А',k:'expl88',t:'НДС',s:'draft',due:'08.10',l:5,c:'',p:'2 кв. 2026'},
+   {e:'А',k:'call',t:'НДС',s:'new',due:'12.10',l:7,c:'К-7',p:'2 кв. 2026'},
+   {e:'А',k:'doc93',t:'Прибыль',s:'answered',due:'',l:null,c:'К-3',p:'1 кв. 2026'},
+   {e:'А',k:'info',t:'НДФЛ и взносы',s:'answered',due:'',l:null,c:'',p:'2 кв. 2026'},
+   {e:'Б',k:'doc93',t:'Прибыль',s:'receipt',due:'09.10',l:6,c:'К-3',p:'2 кв. 2026'},
+   {e:'Б',k:'pay69',t:'ЕНС и пени',s:'new',due:'05.10',l:2,c:'',p:'сентябрь 2026'},
+   {e:'Б',k:'info',t:'Имущество',s:'answered',due:'',l:null,c:'',p:'2025'},
+   {e:'Б',k:'expl88',t:'НДС',s:'receipt',due:'10.10',l:7,c:'',p:'2 кв. 2026'},
+   {e:'Б',k:'doc93',t:'НДС',s:'new',due:'04.10',l:3,c:'К-7',p:'2 кв. 2026'},
+   {e:'В',k:'doc93',t:'НДС',s:'new',due:'03.10',l:2,c:'К-7',p:'2 кв. 2026'},
+   {e:'В',k:'doc93',t:'НДС',s:'answered',due:'',l:null,c:'К-7',p:'1 кв. 2026'},
+   {e:'В',k:'block',t:'ЕНС и пени',s:'new',due:'сейчас',l:0,c:'',p:'сентябрь 2026'},
+   {e:'В',k:'act',t:'Прибыль',s:'new',due:'30.10',l:21,c:'К-3',p:'2025'},
+   {e:'В',k:'expl88',t:'НДС',s:'answered',due:'',l:null,c:'',p:'1 кв. 2026'}
+  ];
+  var el=function(id){return document.getElementById(id)};
+  if(!el('tbl'))return;
+  function opts(sel,vals,lab){vals.forEach(function(v){var o=document.createElement('option');o.value=v;o.textContent=lab?lab[v]:v;el(sel).appendChild(o)})}
+  opts('fK',Object.keys(K),K);
+  var taxes=[];D.forEach(function(r){if(taxes.indexOf(r.t)<0)taxes.push(r.t)});opts('fT',taxes);
+  function urgent(r){return r.s!=='answered'&&(r.k==='block'||(r.l!==null&&r.l<=2))}
+  function filt(){var e=el('fE').value,k=el('fK').value,t=el('fT').value,s=el('fS').value,u=el('fU').checked;
+    return D.filter(function(r){return(!e||r.e===e)&&(!k||r.k===k)&&(!t||r.t===t)&&(!s||r.s===s)&&(!u||urgent(r))})}
+  function chip(r){if(r.s==='answered')return '<span class="chip ok">закрыто</span>';
+    if(r.k==='block')return '<span class="chip bad">срочно</span>';
+    if(r.l!==null&&r.l<=2)return '<span class="chip warn">горит</span>';return '<span class="chip in">в работе</span>'}
+  function patterns(rows){
+    var out=[];
+    var cm={};rows.forEach(function(r){if(r.c){(cm[r.c]=cm[r.c]||{ents:{},n:0});cm[r.c].ents['Юрлицо '+r.e]=1;cm[r.c].n++}});
+    Object.keys(cm).forEach(function(c){var es=Object.keys(cm[c].ents);if(es.length>=2)out.push('<div class="pat"><b>Общий контрагент '+c+'</b>Запросы по нему у разных юрлиц: '+es.join(', ')+' (всего '+cm[c].n+'). Налоговая может искать связь между юрлицами; заранее проверьте договоры и документы по '+c+'.</div>')});
+    var g={};rows.forEach(function(r){var key=r.e+'|'+r.t+'|'+r.p;(g[key]=g[key]||{kinds:{},n:0,e:r.e,t:r.t,p:r.p});g[key].kinds[r.k]=1;g[key].n++});
+    Object.keys(g).forEach(function(key){var x=g[key];if(x.kinds.expl88&&x.kinds.doc93&&x.kinds.call)out.push('<div class="pat"><b>Нарастающая проверка: юрлицо '+x.e+', '+x.t+', '+x.p+'</b>Пояснения, затем запрос документов, затем вызов по одной теме. Обычно так идёт углублённая проверка: готовьте полный пакет заранее.</div>')});
+    var rep={};rows.forEach(function(r){var key=r.e+'|'+r.t;rep[key]=(rep[key]||0)+1});
+    Object.keys(rep).forEach(function(key){if(rep[key]>=3){var p=key.split('|');out.push('<div class="pat"><b>Повтор темы: юрлицо '+p[0]+', '+p[1]+'</b>Уже '+rep[key]+' документа по одной теме. Стоит разобрать причину, а не отвечать каждый раз отдельно.</div>')}});
+    rows.forEach(function(r){if(r.k==='block'&&r.s!=='answered'){var why=D.filter(function(x){return x.e===r.e&&x.s==='new'&&(x.k==='doc93'||x.k==='expl88')});
+      out.push('<div class="pat"><b>Блокировка у юрлица '+r.e+'</b>'+(why.length?'Возможная причина: по этому юрлицу есть '+why.length+' нового требования без квитанции или ответа. Сначала закрыть их.':'Причину искать в долге по ЕНС или непредставленной отчётности.')+'</div>')}});
+    return out.length?out.join(''):'<p class="hint">При выбранных фильтрах паттернов нет. Сбросьте фильтры, чтобы увидеть связи между юрлицами.</p>'}
+  function render(){var rows=filt();
+    var urg=rows.filter(urgent).length,blk=rows.filter(function(r){return r.k==='block'&&r.s!=='answered'}).length,
+        open_=rows.filter(function(r){return r.s!=='answered'}).length;
+    var cm={};rows.forEach(function(r){if(r.c){(cm[r.c]=cm[r.c]||{})['Ю'+r.e]=1}});
+    var common=Object.keys(cm).filter(function(c){return Object.keys(cm[c]).length>=2}).length;
+    el('tiles').innerHTML=
+     '<div class="tile"><div class="n" style="color:var(--bad)">'+urg+'</div>Срочные и горящие</div>'+
+     '<div class="tile"><div class="n" style="color:var(--bad)">'+blk+'</div>Блокировки счёта</div>'+
+     '<div class="tile"><div class="n">'+open_+'</div>Открытые из '+rows.length+'</div>'+
+     '<div class="tile"><div class="n" style="color:var(--acc2)">'+common+'</div>Общие контрагенты</div>'+
+     '<div class="tile"><div class="n">'+rows.filter(function(r){return r.s==="draft"}).length+'</div>Черновик ждёт проверки</div>'+
+     '<div class="tile"><div class="n">'+Object.keys(rows.reduce(function(a,r){a[r.e]=1;return a},{})).length+'</div>Юрлица в выборке</div>';
+    var h='<tr><th>Юр.</th><th>Вид</th><th>Налог</th><th>Срок</th><th>Статус</th><th></th></tr>';
+    rows.sort(function(a,b){return (urgent(b)?1:0)-(urgent(a)?1:0)||(a.l===null)-(b.l===null)||(a.l-b.l)}).forEach(function(r){
+      h+='<tr><td>'+r.e+'</td><td>'+K[r.k]+(r.c?' <span class="hint">('+r.c+')</span>':'')+'</td><td>'+r.t+'</td><td>'+(r.due||'-')+'</td><td>'+ST[r.s]+'</td><td>'+chip(r)+'</td></tr>'});
+    el('tbl').innerHTML=h; el('pat').innerHTML=patterns(rows)}
+  ['fE','fK','fT','fS'].forEach(function(id){el(id).onchange=render});el('fU').onchange=render;
+  el('fR').onclick=function(){['fE','fK','fT','fS'].forEach(function(id){el(id).value=''});el('fU').checked=false;render()};
+  render();
 })();
 </script>
 </body>
