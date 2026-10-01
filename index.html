@@ -55,18 +55,26 @@ nav.bot{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top
 .hint{color:var(--mute);font-size:13px}
 .demo{font-size:12px;color:var(--mute);margin-top:14px}
 .risk{border-left:4px solid var(--warn);padding-left:10px}
+.aud{display:inline-block;font-size:13px;font-weight:600;padding:4px 12px;border-radius:999px;margin:2px 0 6px}
+.aud-r{background:var(--soft);color:var(--acc)}.aud-t{background:transparent;border:1px dashed var(--warn);color:var(--warn)}.aud-b{background:var(--soft);color:var(--acc2)}
+#dots button.d-t{background:transparent;border:2px solid var(--warn)}#dots button.d-b{background:var(--acc2)}
+.legend{font-size:12px;color:var(--mute);display:flex;gap:8px;align-items:center}.legend i{display:inline-block;width:10px;height:10px;border-radius:50%}
+.legend .lr{background:var(--acc)}.legend .lt{border:2px solid var(--warn)}.legend .lb{background:var(--acc2)}
+@media(max-width:760px){.legend{display:none}}
 </style>
 </head>
 <body>
 <header>
   <b>Требования ФНС по юрлицам</b>
   <span class="tag">демо на обезличенных данных</span>
+  <span class="legend"><i class="lr"></i>руководителю <i class="lb"></i>обоим <i class="lt"></i>специалисту</span>
   <div id="dots"></div>
   <button class="theme" id="theme" title="Тема">Тема</button>
 </header>
 <main>
 
-<section class="slide" data-title="Старт">
+<section class="slide" data-title="Старт" data-aud="r">
+  <div class="aud aud-r">Для руководителя</div>
   <h1>Как мы будем собирать требования налоговой по каждому юрлицу</h1>
   <p class="lead">Показываем на нашей тестовой схеме, без данных клиента. Идея простая: у каждого юрлица свой маленький сборщик, наружу уходят только карточки требований, а решения принимает человек.</p>
   <div class="grid g3">
@@ -74,10 +82,11 @@ nav.bot{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top
     <div class="card"><h3>2. Готовить</h3>Черновик ответа, когда требование расшифровано держателем подписи. Для черновика на сервер уходит текст требования: это отдельное решение клиента.</div>
     <div class="card"><h3>3. Не терять срок</h3>Отбивка ответственному: новое, горит, просрочено, готов черновик, ответ ушёл.</div>
   </div>
-  <p class="demo"><b>Термины.</b> ВМ: виртуальная машина юрлица (у каждого своя). Сервер: наш сервер, куда приходят карточки. Пульт: один дашборд с кнопками для ответственного. Простыми словами про программу: маленькая программа на вашей виртуальной машине раз в 15 минут сама заходит в СБИС, читает и пишет в журнал, ничего не подписывает и не отправляет. Стрелки влево и вправо листают. Вопросы к вам на последних слайдах: поправляйте нас, перестроимся.</p>
+  <p class="demo"><b>Как читать.</b> Сверху каждого слайда пометка, кому он нужен. Руководителю достаточно слайдов с пометкой «Для руководителя»: остальные технические, их можно пролистать. <b>Термины.</b> ВМ: виртуальная машина юрлица (у каждого своя). Сервер: наш сервер, куда приходят карточки. Пульт: один дашборд с кнопками для ответственного. Простыми словами про программу: маленькая программа на вашей виртуальной машине раз в 15 минут сама заходит в СБИС, читает и пишет в журнал, ничего не подписывает и не отправляет. Стрелки влево и вправо листают. Вопросы к вам на последних слайдах: поправляйте нас, перестроимся.</p>
 </section>
 
-<section class="slide" data-title="Поток">
+<section class="slide" data-title="Поток" data-aud="r">
+  <div class="aud aud-r">Для руководителя</div>
   <h2>Путь требования туда и ответа обратно</h2>
   <p class="lead">Сплошные стрелки: сбор (этап 1, только чтение). Пунктир: обратный путь ответа до налоговой (этап 2, включается по вашему согласию). Штриховая рамка слева: то, что не покидает виртуальную машину юрлица.</p>
   <div class="card">
@@ -131,7 +140,8 @@ nav.bot{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top
   </div>
 </section>
 
-<section class="slide" data-title="Инструменты">
+<section class="slide" data-title="Инструменты" data-aud="t">
+  <div class="aud aud-t">Для технического специалиста: руководителю можно пропустить</div>
   <h2>Из чего построено: чем собираем и чем отдаём</h2>
   <p class="lead">Ничего экзотического. На вашей виртуальной машине нужны только Python и задача Планировщика Windows; никаких открытых входящих портов, Docker и удалённого управления.</p>
   <div class="card"><table>
@@ -149,7 +159,8 @@ nav.bot{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top
   <p class="demo">Один сборщик, один кабинет: свои учётные данные, свой каталог данных, свой журнал. Что и где обновляется, вы видите в журнале на ВМ.</p>
 </section>
 
-<section class="slide" data-title="Что собираем">
+<section class="slide" data-title="Что собираем" data-aud="t">
+  <div class="aud aud-t">Для технического специалиста: руководителю можно пропустить</div>
   <h2>Что именно собираем и что остаётся на виртуальной машине</h2>
   <p class="lead"><span class="tag ok">подтверждено 01.10.2026</span> имена ключей реально вернул API СБИС на нашем кабинете для обычных входящих (значения выдуманы). <span class="tag warn">предположительно</span> точные поля именно требования ФНС: нужен настоящий пример от вас.</p>
   <div class="grid g2">
@@ -174,7 +185,8 @@ nav.bot{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top
   <p class="demo">Из ответа СБИС реально видны: Реестр (строки), Навигация (ЕстьЕще), в строке: ДатаВремя, Документ, Состояние. Внутри Документа: Тип, Подтип, Регламент, Направление, НашаОрганизация, Контрагент, Срок, Сумма, Номер, Дата, Вложение.</p>
 </section>
 
-<section class="slide" data-title="Границы">
+<section class="slide" data-title="Границы" data-aud="t">
+  <div class="aud aud-t">Для технического специалиста: руководителю можно пропустить</div>
   <h2>Границы доверия: кто что может</h2>
   <p class="lead">Для технического специалиста: на что мы опираемся и чего принципиально не делаем.</p>
   <div class="card"><table>
@@ -190,7 +202,48 @@ nav.bot{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top
   </div>
 </section>
 
-<section class="slide" data-title="Ответ с пульта">
+<section class="slide" data-title="Доставка" data-aud="t">
+  <div class="aud aud-t">Для технического специалиста: руководителю можно пропустить</div>
+  <h2>Доставка на сервер: как защищены пакеты</h2>
+  <p class="lead">Пакет шифруется при передаче (HTTPS, как в онлайн-банке) и подписывается ключом конкретной ВМ. Принимаем и отправляем только зашифрованное.</p>
+  <div class="card"><table>
+    <tr><th>Что может пойти не так</th><th>Что делаем</th></tr>
+    <tr><td>Подслушать по дороге</td><td>HTTPS (TLS 1.2 и выше); сервер не принимает незашифрованные соединения.</td></tr>
+    <tr><td>Подделать карточку</td><td>Подпись пачки отдельным ключом каждой ВМ; ключ отзывается за минуту; сервер сверяет, что ВМ и ИНН юрлица совпадают.</td></tr>
+    <tr><td>Повторить старую пачку</td><td>В каждой пачке метка времени и одноразовый номер; сервер отбрасывает повторы.</td></tr>
+    <tr><td>Достучаться до сервера из интернета</td><td>Принимает только подписанное, ограничивает частоту запросов, при желании пускает только с адресов ваших ВМ.</td></tr>
+    <tr><td>Увидеть лишнее</td><td>В пачке только карточки: номер, даты, срок, статус, суть. Без паролей, файлов и подписей.</td></tr>
+    <tr><td>Нельзя открыть соединение с сервером</td><td>Запасные пути: шифрованная пачка в облачной папке (шифруем до загрузки; для персональных данных российское хранилище или ваше собственное) или почта.</td></tr>
+  </table></div>
+  <p class="demo">Канал выбираем вместе, исходя из ваших сетевых правил. Подтверждать на практике нечего: схема стандартная, проверяем только при настройке.</p>
+</section>
+
+<section class="slide" data-title="Модель и данные" data-aud="b">
+  <div class="aud aud-b">Для руководителя (идея) и специалиста (детали)</div>
+  <h2>Языковая модель: как данные остаются защищёнными</h2>
+  <p class="lead">Мы не полагаемся на обещания провайдера модели. Перед моделью данные подменяются метками, поэтому условия любого сервиса становятся второстепенными.</p>
+  <div class="grid g2">
+    <div class="card"><h3>Подмена данных на метки (пример)</h3>
+      <p class="hint">Было (условный пример):</p>
+      <div class="bubble">ООО «Ромашка», ИНН (десять цифр), требует документы по сделке с ИП Иванов И.И.</div>
+      <p class="hint" style="margin-top:8px">В модель уходит:</p>
+      <div class="bubble">[ОРГ_1], ИНН [ИНН_1], требует документы по сделке с [ИП_1]</div>
+      <p class="hint" style="margin-top:8px">Модель пишет черновик с метками, а настоящие значения подставляются обратно на нашем сервере. Модель настоящих имён и номеров не видит.</p></div>
+    <div class="card"><h3>Дополнительные меры</h3>
+      <ul style="margin:6px 0 0 18px;padding:0">
+      <li>Один запрос к модели относится только к одному юрлицу; общего контекста между юрлицами нет.</li>
+      <li>Дообучения на ваших документах нет.</li>
+      <li>Код проверяет, что в черновике нет чужого ИНН и названия.</li>
+      <li>Формальная часть ответа идёт по шаблонам, модель пишет только суть.</li>
+      <li>Человек проверяет черновик перед отправкой.</li></ul></div>
+  </div>
+  <div class="card" style="margin-top:12px"><h3>Какая модель</h3>
+    Выбираем с вами: модель в вашем контуре (локальная) или российский сервис по вашему договору. Решаем после слепой проверки на 10-20 обезличенных реальных требованиях.
+    <p class="demo"><span class="tag warn">не проверено</span> Качество любой модели именно на требованиях ФНС мы пока не измеряли. Условия провайдеров (например, один из них не рассчитан на персональные данные третьих лиц, другой по умолчанию хранит запросы, пока не отключено логирование) читаем отдельно: при надёжной подмене на метки это не мешает.</p></div>
+</section>
+
+<section class="slide" data-title="Ответ с пульта" data-aud="b">
+  <div class="aud aud-b">Для руководителя (идея) и специалиста (детали)</div>
   <h2>Отправка ответа с пульта: как это работает и что нужно включить</h2>
   <p class="lead">Ответственный видит все юрлица на одном пульте, правит черновик и нажимает «Утвердить и отправить». Отправка уходит из кабинета каждого юрлица его же подписью. По документации СБИС всё нужное для этого есть. Включается <b>отдельным этапом 2 по вашему согласию</b>; этап 1 (сбор) только читает.</p>
   <div class="card" style="margin-bottom:10px"><h3>Какие вызовы СБИС стоят за кнопкой «Отправить»</h3><table>
@@ -219,7 +272,8 @@ nav.bot{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top
   <p><button class="btn" id="playReply">Показать цикл</button> <button class="btn ghost" id="resetReply">Сбросить</button></p>
 </section>
 
-<section class="slide" data-title="Контроль">
+<section class="slide" data-title="Контроль" data-aud="r">
+  <div class="aud aud-r">Для руководителя</div>
   <h2>Контроль: дошёл ли ответ, жива ли подпись и подписка</h2>
   <p class="lead">Сборщик на ВМ каждые 15 минут не только ищет новое, но и проверяет, что уже отправленное действительно дошло, и следит за сроками подписей и услуг. Любая поломка превращается в понятную отбивку.</p>
   <div class="grid g2">
@@ -248,7 +302,8 @@ nav.bot{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top
   <p class="demo">Цифры и примеры выдуманы для макета. Эти проверки входят в этап 1 (чтение); отправку они не включают.</p>
 </section>
 
-<section class="slide" data-title="Дашборд">
+<section class="slide" data-title="Дашборд" data-aud="r">
+  <div class="aud aud-r">Для руководителя</div>
   <h2>Что увидит ответственный</h2>
   <p class="lead">Макет, цифры выдуманы. Сверху то, что требует действия сейчас, ниже счётчики и разбивка по юрлицам. Живого дашборда у вас пока нет: он будет на нашей стороне, доступ вы определяете.</p>
   <div class="grid g3">
@@ -273,13 +328,15 @@ nav.bot{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top
   <p class="demo">Срок ответа показываем только если его дал источник. Если даты нет, система пишет «нет данных» и просит проверить вручную.</p>
 </section>
 
-<section class="slide" data-title="Вопросы">
+<section class="slide" data-title="Вопросы" data-aud="t">
+  <div class="aud aud-t">Для технического специалиста: руководителю можно пропустить</div>
   <h2>Вопросы вам: поправьте нас</h2>
   <p class="lead">Отвечайте как удобно, можно голосом на созвоне. От ответов зависит, как мы перестроим схему.</p>
   <div class="grid g2" id="qs"></div>
 </section>
 
-<section class="slide" data-title="Дальше">
+<section class="slide" data-title="Дальше" data-aud="r">
+  <div class="aud aud-r">Для руководителя</div>
   <h2>Что делаем дальше</h2>
   <div class="steps">
     <div class="step"><b>1.</b> Фиксируем ваши ответы и список юрлиц.</div>
@@ -302,7 +359,7 @@ nav.bot{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top
 (function(){
   var slides=[].slice.call(document.querySelectorAll('section.slide')), i=0;
   var dots=document.getElementById('dots');
-  slides.forEach(function(s,k){var b=document.createElement('button');b.title=s.getAttribute('data-title');b.onclick=function(){go(k)};dots.appendChild(b)});
+  slides.forEach(function(s,k){var b=document.createElement('button');b.title=s.getAttribute('data-title');b.className='d-'+(s.getAttribute('data-aud')||'r');b.onclick=function(){go(k)};dots.appendChild(b)});
   function go(k){i=Math.max(0,Math.min(slides.length-1,k));slides.forEach(function(s,j){s.classList.toggle('on',j===i)});
     [].forEach.call(dots.children,function(d,j){d.classList.toggle('on',j===i)});
     document.getElementById('pos').textContent=(i+1)+' из '+slides.length+' - '+slides[i].getAttribute('data-title');
