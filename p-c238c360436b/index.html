@@ -483,8 +483,8 @@ details.why{margin-top:16px;border:1px dashed var(--line);border-radius:16px;pad
   <div class="offer">
     <div class="eyebrow">Предложение &middot; этап 1 под ключ</div>
     <div class="price"><small>от</small> 150 000 <small>до</small> 190 000 <span>&#8381;</span></div>
-    <p>Фиксированная цена этапа зависит от числа юрлиц: 150 000 за одно, до 190 000 за три. Сбор требований и статусов из кабинетов, свод по всем юрлицам, отбивки ответственным. Несколько рабочих дней, только чтение.</p>
-    <div class="hchips"><span class="hchip">Оплата после приёмки</span><span class="hchip">Абонплата только с запуска: 25 000 &#8381;/мес</span><span class="hchip">Больше трёх юрлиц: считаем отдельно</span></div>
+    <p>Фиксированная цена этапа зависит от числа юрлиц: 150 000 за одно, не больше 190 000 за любое число до десяти. Сбор требований и статусов из кабинетов, свод по всем юрлицам, отбивки ответственным. Несколько рабочих дней, только чтение.</p>
+    <div class="hchips"><span class="hchip">Оплата после приёмки</span><span class="hchip">Абонплата только с запуска: 25 000 &#8381;/мес</span><span class="hchip">Больше десяти юрлиц: считаем отдельно</span></div>
   </div>
 
   <h3 class="sec">Во сколько обошлось бы заказать это у специалистов</h3>
@@ -542,8 +542,8 @@ details.why{margin-top:16px;border:1px dashed var(--line);border-radius:16px;pad
     <p class="hint">Часы это наша оценка (гипотеза), ставка ориентир по рынку: от 1 500 до 10 000 руб/час, в студиях 3 000-5 000 для среднего специалиста (<a href="https://kvant-c.ru/faq/1c-programmist-stoimost-2026/">Квант-С, 05.2026</a>). Меняйте ставку, часы и число юрлиц.</p>
     <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0">
       <label>Ставка, руб/час <input id="cRate" type="number" value="4000" step="500" style="width:90px"></label>
-      <label>Юрлиц <input id="cEnt" type="number" value="3" min="1" style="width:60px"></label>
-      <label>Часов на подключение каждого следующего <input id="cExtra" type="number" value="6" style="width:60px"></label>
+      <label>Юрлиц <input id="cEnt" type="number" value="10" min="1" style="width:60px"></label>
+      <label>Часов на подключение каждого следующего <input id="cExtra" type="number" value="1" style="width:60px"></label>
     </div>
     <div style="overflow-x:auto"><table id="cTbl"></table></div>
     <div id="cSum" class="bubble" style="margin-top:10px"></div>
@@ -698,8 +698,8 @@ details.why{margin-top:16px;border:1px dashed var(--line);border-radius:16px;pad
     rows.forEach(function(r,i){tot[r[0]]+=r[2];h+='<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td><input type="number" data-i="'+i+'" value="'+r[2]+'" style="width:64px"></td><td>'+fmt(r[2]*rate)+'</td></tr>'});
     h+='<tr><td>Этап 1</td><td>Подключение каждого следующего юрлица ('+(ent-1)+' шт.)</td><td>'+(ex*(ent-1))+'</td><td>'+fmt(ex*(ent-1)*rate)+'</td></tr>';
     g('cTbl').innerHTML=h;
-    var e1=(tot['Этап 1']+ex*(ent-1))*rate,e2=tot['Этап 2']*rate,e3=tot['Этап 3']*rate;
-    g('cSum').innerHTML='<b>Этап 1 (несколько рабочих дней):</b> '+fmt(e1)+' руб<br><b>Этап 2:</b> '+fmt(e2)+' руб (оценим после тестовой среды)<br><b>Этап 3:</b> '+fmt(e3)+' руб<br><b>Итого:</b> '+fmt(e1+e2+e3)+' руб<br><span class="hint">Плюс абонплата с запуска (рынок: 15-50 тыс. руб/мес; предложение для начала 20-30 тыс.). Все числа гипотезы для разговора.</span>';
+    var e1raw=(tot['Этап 1']+ex*(ent-1))*rate,e1=ent<=10?Math.min(190000,Math.max(150000,e1raw)):e1raw,e2=tot['Этап 2']*rate,e3=tot['Этап 3']*rate;
+    g('cSum').innerHTML='<b>Этап 1 (несколько рабочих дней):</b> '+fmt(e1)+' руб'+(ent<=10?' <span class="hint">(по расчёту '+fmt(e1raw)+'; цена этапа не меньше 150 000 и не больше 190 000 при числе юрлиц до десяти)</span>':' <span class="hint">(сверх десяти юрлиц считаем отдельно)</span>')+'<br><b>Этап 2:</b> '+fmt(e2)+' руб (оценим после тестовой среды)<br><b>Этап 3:</b> '+fmt(e3)+' руб<br><b>Итого:</b> '+fmt(e1+e2+e3)+' руб<br><span class="hint">Плюс абонплата с запуска (рынок: 15-50 тыс. руб/мес; предложение для начала 20-30 тыс.). Все числа гипотезы для разговора.</span>';
     [].forEach.call(g('cTbl').querySelectorAll('input'),function(inp){inp.onchange=function(){rows[+inp.getAttribute('data-i')][2]=+inp.value||0;render()}})}
   ['cRate','cEnt','cExtra'].forEach(function(id){g(id).onchange=render;g(id).oninput=render});
   render();
